@@ -9,6 +9,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 const useStyles = makeStyles({
@@ -36,6 +40,18 @@ export default function EndpointTable(props) {
         setState({ rows: [...state.rows, { method: "", endpoint: "", body: "" }] });
     }
 
+    const handleChange = (event, index) => {
+        let items = [...state.rows];
+        // 2. Make a shallow copy of the item you want to mutate
+        let item = { ...items[index] };
+        // 3. Replace the property you're intested in
+        item.method = event.target.value;
+        // 4. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
+        items[index] = item;
+        // 5. Set the state to our new copy
+        setState({ rows: items });
+    };
+
 
     return (
         <Container>
@@ -52,15 +68,34 @@ export default function EndpointTable(props) {
                     <TableBody>
                         {state.rows.map((row, index) => (
                             <TableRow key={index}>
+                                {/*<form className={classes.root} noValidate autoComplete="off">*/}
                                 <TableCell component="th" scope="row">
-                                    {row.method}
+                                    <InputLabel id="demo-simple-select-outlined-label">Method</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-outlined-label"
+                                        id="demo-simple-select-outlined"
+                                        value={row.method}
+                                        onChange={event => handleChange(event, index)}
+                                        label="Method"
+                                    >
+                                        <MenuItem value={"GET"}>GET</MenuItem>
+                                        <MenuItem value={"POST"}>POST</MenuItem>
+                                        <MenuItem value={"PUT"}>PUT</MenuItem>
+                                        <MenuItem value={"DELETE"}>DELETE</MenuItem>
+                                    </Select>
+                                    {/*<TextField id="method" label="Outlined" variant="outlined" value={row.method} />*/}
                                 </TableCell>
-                                <TableCell align="right">{row.endpoint}</TableCell>
-                                <TableCell align="right">{row.body}</TableCell>
+                                <TableCell align="right">
+                                    <TextField id="endpoint" label="Outlined" variant="outlined" value={row.endpoint} />
+                                </TableCell>
+                                <TableCell align="right">
+                                    <TextField id="body" label="Outlined" variant="outlined" value={row.body} multiline rows={4} />
+                                </TableCell>
                                 <TableCell align="right">
                                     <Button variant="contained" color="primary" value={row} onClick={() => postElement(row)}>Add</Button>
                                     <Button variant="contained" color="secondary" onClick={() => removeRow(row)}>Remove</Button>
                                 </TableCell>
+                                {/*</form>*/}
                             </TableRow>
                         ))}
                     </TableBody>
