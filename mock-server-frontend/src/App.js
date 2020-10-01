@@ -59,6 +59,18 @@ function App() {
     setValue(newValue);
   };
 
+
+  function createData(method, endpoint, body) {
+    return { method, endpoint, body };
+  }
+
+  const rows = [
+    createData("GET", "/api/v1/test", "{json: \"body\"}"),
+    createData("POST", "/api/v1/test", "{json: \"body\"}"),
+    createData("PUT", "/api/v1/test", "{json: \"body\"}"),
+    createData("DELETE", "/api/v1/test", "{json: \"body\"}")
+  ];
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -68,7 +80,7 @@ function App() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <EndpointTable />
+        <EndpointTable rows={rows} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Log table
