@@ -19,12 +19,13 @@ app.get('/mocks', (req, res) => {
 })
 
 app.post('/mocks', (req, res) => {
+  console.log('req', req);
   var fixedURL = util.fixURLParameter(req.body.url);
   db.upsertMock(req.body.method, fixedURL, req.body.value);
   res.sendStatus(200);
 })
 
-app.delete('/mocks', (req, res) => {
+app.post('/mocks/delete', (req, res) => {
   var fixedURL = util.fixURLParameter(req.body.url);
   db.removeMock(req.body.method, fixedURL);
   res.sendStatus(200)
