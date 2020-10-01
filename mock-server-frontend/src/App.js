@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import EndpointTable from './components/EndpointTable';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -66,7 +68,7 @@ function App() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        Endpoint table
+        <EndpointTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Log table
