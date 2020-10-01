@@ -60,8 +60,8 @@ function App() {
   };
 
 
-  function createData(method, endpoint, body, isSaved) {
-    return { method, endpoint, body, isSaved};
+  function createData(method, url, value, isSaved) {
+    return { method, url, value, isSaved};
   }
 
   const rows = [
