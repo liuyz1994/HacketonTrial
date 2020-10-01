@@ -43,5 +43,10 @@ module.exports = class Database {
             console.log(err);
         }
     }
+
+    getMockByMethodAndURL(url, method) {
+        var filePath = 'db' + url + '.' + method+ '.json'; 
+        return fs.readFileSync(filePath);
+    }
 }
 

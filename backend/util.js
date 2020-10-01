@@ -27,4 +27,8 @@ module.exports = class Util {
         }
         return walk(folder)
     }
+
+    removeMockPartFromPath(url) {
+        return url.substring(5, url.length);
+    }
 }

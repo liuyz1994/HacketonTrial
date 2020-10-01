@@ -18,17 +18,41 @@ app.get('/mocks', (req, res) => {
   res.send(result)
 })
 
-app.post('/upsertmock', (req, res) => {
+app.post('/mocks', (req, res) => {
   var fixedURL = util.fixURLParameter(req.body.url);
   db.upsertMock(req.body.method, fixedURL, req.body.value);
   res.sendStatus(200);
 })
 
-app.delete('/removemock', (req, res) => {
+app.delete('/mocks', (req, res) => {
   var fixedURL = util.fixURLParameter(req.body.url);
   db.removeMock(req.body.method, fixedURL);
   res.sendStatus(200)
 });
+
+app.route('/mock/*')
+  .get(function (req, res) {
+    var requestedURL = util.removeMockPartFromPath(req.url);
+    var body = db.getMockByMethodAndURL(requestedURL, 'GET');
+    res.send(body);
+  })
+  .post(function (req, res) {
+    var requestedURL = util.removeMockPartFromPath(req.url);
+    var body = db.getMockByMethodAndURL(requestedURL, 'POST');
+    res.send(body);
+  })
+  .put(function (req, res) {
+    var requestedURL = util.removeMockPartFromPath(req.url);
+    var body = db.getMockByMethodAndURL(requestedURL, 'PUT');
+    res.send(body);
+  })
+  .delete(function (req, res) {
+    var requestedURL = util.removeMockPartFromPath(req.url);
+    var body = db.getMockByMethodAndURL(requestedURL, 'DELETE');
+    res.send(body);
+  });
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
