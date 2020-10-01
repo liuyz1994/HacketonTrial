@@ -1,12 +1,14 @@
 const fs = require('fs');
 
 
-class Database {
+module.exports = class Database {
     upsertMock(method, url, body) {
-        var fileName = 'req.' + url + '.' + method + '.json';
-        fs.writeFile('.db/' + fileName ,JSON.stringify(body),function(err) {
-            if(err) throw err;
-        })
+        var directories = url.split('/');
+        var fileName = directories.pop();
+        var path ='db/' + directories.join('/');
+        var pathAndFileName = path + '/' + fileName + '.' + method + '.json'
+        fs.mkdirSync(path, { recursive: true });
+        fs.writeFileSync(pathAndFileName, JSON.stringify(body));
     };
 
     getMocks() {
@@ -14,7 +16,7 @@ class Database {
     }
 
     removeMock() {
-        
+
     }
 
 }
