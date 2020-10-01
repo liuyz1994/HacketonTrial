@@ -39,16 +39,18 @@ export default function EndpointTable() {
     const getAll = () => {
         axios.get(baseUrl + '/mocks')
             .then(res => {
-                console.log(res.data);
-                setState({ rows: res.data })
+                let data = res.data;
+                console.log(data);
+                data.foreach(x => { x["isSaved"] = true });
+                setState({ rows: data })
             })
     }
 
     const postElement = element => {
         axios.post(
             baseUrl + '/mocks',
-            element,
-            // { method: element.method, url: element.url, value: element.value },
+            // element,
+            { method: element.method, url: element.url, value: element.value },
             { headers: { 'Content-Type': 'application/json' } }
         ).then(res => {
             console.log(res.data);
@@ -58,8 +60,8 @@ export default function EndpointTable() {
     const removeRow = element => {
         axios.delete(
             baseUrl + '/mocks',
-            element,
-            // { method: element.method, url: element.url, value: element.value },
+            // element,
+            { method: element.method, url: element.url, value: element.value },
             { headers: { 'Content-Type': 'application/json' } }
         ).then(res => {
             console.log(res.data);
