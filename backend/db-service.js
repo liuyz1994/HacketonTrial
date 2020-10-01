@@ -48,5 +48,17 @@ module.exports = class Database {
         var filePath = 'db' + url + '.' + method + '.json';
         return JSON.parse(fs.readFileSync(filePath));
     }
+
+    addLog(method, url, reqBody, resBody, source) {
+        var logs = fs.readFileSync('backend/logs.json');
+        var logsArray = logs != '' ? JSON.parse(logs) : [];
+        logsArray.unshift({method, url, reqBody, resBody, source});
+        logsArray = logsArray.length > 100 ? logsArray.slice(0, 99) : logsArray;
+        fs.writeFileSync('backend/logs.json', JSON.stringify(logsArray));
+    };
+    
+    getLogs() {
+        return fs.readFileSync('backend/logs.json');
+    }
 }
 

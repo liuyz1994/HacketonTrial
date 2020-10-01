@@ -30,10 +30,16 @@ app.delete('/mocks', (req, res) => {
   res.sendStatus(200)
 });
 
+app.get('/logs', (req, res) => {
+  var logs = db.getLogs();
+  res.send(logs);
+});
+
 var responseWithMock = function (req, res) {
   var requestedURL = util.removeMockPartFromPath(req.url);
   try {
     var body = db.getMockByMethodAndURL(requestedURL, req.method);
+    db.addLog(req.method, requestedURL, req.body, body, req.get('host'));
     res.setHeader("Content-Type", "application/json");
     res.send(body);
   } catch (err) {
