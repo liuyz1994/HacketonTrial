@@ -6,13 +6,14 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
+//import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import axios from 'axios';
 
 
 const useStyles = makeStyles({
@@ -29,15 +30,38 @@ export default function EndpointTable(props) {
     const [state, setState] = React.useState({ rows: props.rows });
 
     const postElement = element => {
-        console.log(element);
+        axios.post(
+            'htpps:{server_url}/mocks',
+             element,
+            { headers: { 'Content-Type': 'application/json' } }
+        ).then(res => {
+            console.log(res.data);
+        });
+
+
     };
 
     const removeRow = element => {
-        console.log(element);
+        axios.delete(
+            'htpps:{server_url}/mocks',
+             element, 
+            { headers: { 'Content-Type': 'application/json' } }
+        ).then(res => {
+            console.log(res.data);
+        });
     };
+    
+    // const getSomething = element =>{
+    //     axios.get(
+    //        'https://jsonplaceholder.typicode.com/users',
+    //        { headers: { 'Content-Type': 'application/json' } }
+    //     ).then(res => {
+    //         console.log(res.data);
+    //     });
+    // }
 
     const addRow = () => {
-        setState({ rows: [...state.rows, { method: "", endpoint: "", body: "" }] });
+        setState({ rows: [...state.rows, { method: "GET", endpoint: "/api/v1/test", body: "{json: \"body\"}" }] });
     }
 
     const handleChange = (event, index) => {
@@ -53,14 +77,6 @@ export default function EndpointTable(props) {
         <Container>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Method</TableCell>
-                            <TableCell align="right">Endpoint</TableCell>
-                            <TableCell align="right">Response Body</TableCell>
-                            <TableCell align="right"></TableCell>
-                        </TableRow>
-                    </TableHead>
                     <TableBody>
                         {state.rows.map((row, index) => (
                             <TableRow key={index}>
@@ -82,10 +98,10 @@ export default function EndpointTable(props) {
                                     {/*<TextField id="method" label="Outlined" variant="outlined" value={row.method} />*/}
                                 </TableCell>
                                 <TableCell align="right">
-                                    <TextField id="endpoint" label="Outlined" variant="outlined" value={row.endpoint} />
+                                    <TextField id="endpoint" label="EndPoint" variant="outlined" value={row.endpoint} />
                                 </TableCell>
                                 <TableCell align="right">
-                                    <TextField id="body" label="Outlined" variant="outlined" value={row.body} multiline rows={4} />
+                                    <TextField id="body" label="Response Body" variant="outlined" value={row.body} multiline rows={4} />
                                 </TableCell>
                                 <TableCell align="right">
                                     <Button variant="contained" color="primary" value={row} onClick={() => postElement(row)}>Add</Button>
