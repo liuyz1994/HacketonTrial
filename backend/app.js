@@ -10,12 +10,15 @@ app.use(cors())
 
 app.get('/a', (req, res) => {
   var db = new Database;
-  db.upsertMock('POST', '/testurl/getData', {'test' : 1});
-  res.send('Hello World!')
+  var result = db.getMock('POST', '/testurl/getData');
+  res.setHeader('content-type', 'application/json; charset=utf-8');
+  res.send(result)
 })
 
 app.post('/a', (req, res) => {
-  database.upsertMock('POST', '/testurl/getData', {'test' : 1});
+  var db = new Database;
+  db.upsertMock('POST', '/testurl/getData', { 'test': 1 });
+  res.send('Hello World!')
 })
 
 app.listen(port, () => {
