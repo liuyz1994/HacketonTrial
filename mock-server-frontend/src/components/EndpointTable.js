@@ -23,6 +23,7 @@ const useStyles = makeStyles({
 });
 
 
+
 export default function EndpointTable(props) {
     const classes = useStyles();
 
@@ -32,7 +33,7 @@ export default function EndpointTable(props) {
     const postElement = element => {
         axios.post(
             'htpps:{server_url}/mocks',
-             element,
+            element,
             { headers: { 'Content-Type': 'application/json' } }
         ).then(res => {
             console.log(res.data);
@@ -44,13 +45,13 @@ export default function EndpointTable(props) {
     const removeRow = element => {
         axios.delete(
             'htpps:{server_url}/mocks',
-             element, 
+            element,
             { headers: { 'Content-Type': 'application/json' } }
         ).then(res => {
             console.log(res.data);
         });
     };
-    
+
     // const getSomething = element =>{
     //     axios.get(
     //        'https://jsonplaceholder.typicode.com/users',
@@ -61,7 +62,7 @@ export default function EndpointTable(props) {
     // }
 
     const addRow = () => {
-        setState({ rows: [...state.rows, { method: "GET", endpoint: "/api/v1/test", body: "{json: \"body\"}" }] });
+        setState({ rows: [...state.rows, { method: "GET", endpoint: "/api/v1/test", body: "{json: \"body\"}" , isSaved :false}] });
     }
 
     const handleChange = (event, index) => {
@@ -71,7 +72,6 @@ export default function EndpointTable(props) {
         items[index] = item;
         setState({ rows: items });
     };
-
 
     return (
         <Container>
@@ -104,8 +104,10 @@ export default function EndpointTable(props) {
                                     <TextField id="body" label="Response Body" variant="outlined" value={row.body} multiline rows={4} />
                                 </TableCell>
                                 <TableCell align="right">
-                                    <Button variant="contained" color="primary" value={row} onClick={() => postElement(row)}>Add</Button>
-                                    <Button variant="contained" color="secondary" onClick={() => removeRow(row)}>Remove</Button>
+                                    {(row.isSaved) ? (
+                                        <Button variant="contained" color="secondary" onClick={() => removeRow(row)}>Remove</Button>) :
+                                        (<Button variant="contained" color="primary" onClick={() => postElement(row)}>Add</Button>)
+                                    }
                                 </TableCell>
                                 {/*</form>*/}
                             </TableRow>

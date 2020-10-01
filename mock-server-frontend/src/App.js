@@ -60,15 +60,15 @@ function App() {
   };
 
 
-  function createData(method, endpoint, body) {
-    return { method, endpoint, body };
+  function createData(method, endpoint, body, isSaved) {
+    return { method, endpoint, body, isSaved};
   }
 
   const rows = [
-    createData("GET", "/api/v1/test", "{json: \"body\"}"),
-    createData("POST", "/api/v1/test", "{json: \"body\"}"),
-    createData("PUT", "/api/v1/test", "{json: \"body\"}"),
-    createData("DELETE", "/api/v1/test", "{json: \"body\"}")
+    createData("GET", "/api/v1/test", "{json: \"body\"}", false),
+    createData("POST", "/api/v1/test", "{json: \"body\"}", false),
+    createData("PUT", "/api/v1/test", "{json: \"body\"}", false),
+    createData("DELETE", "/api/v1/test", "{json: \"body\"}", false)
   ];
 
   return (
