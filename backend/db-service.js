@@ -1,7 +1,7 @@
 const fs = require('fs');
 const utilModule = require('./util.js');
 
-const basePath = 'db'
+const basePath = 'db';
 
 const util = new utilModule;
 
@@ -21,18 +21,18 @@ module.exports = class Database {
         var results = [];
         filenames.forEach(function (file) {
             var directories = file.split('/');
-            var fileName = directories.pop()
-            var urlEntity = fileName.split('.')[0]
+            var fileName = directories.pop();
+            var urlEntity = fileName.split('.')[0];
 
             var mockEndpoint = {
                 'method': fileName.split('.')[1],
                 'url': directories.slice(1).join('/') + '/' + urlEntity,
                 'value': JSON.parse(fs.readFileSync(file, 'utf-8'))
-            }
+            };
 
-            results.push(mockEndpoint)
+            results.push(mockEndpoint);
         })
-        return results
+        return results;
     }
 
     removeMock(method, url) {
@@ -45,8 +45,8 @@ module.exports = class Database {
     }
 
     getMockByMethodAndURL(url, method) {
-        var filePath = 'db' + url + '.' + method+ '.json'; 
-        return fs.readFileSync(filePath);
+        var filePath = 'db' + url + '.' + method + '.json';
+        return JSON.parse(fs.readFileSync(filePath));
     }
 }
 
