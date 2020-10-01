@@ -13,9 +13,8 @@ app.use(bodyParser.json())
 
 
 app.get('/mocks', (req, res) => {
-  var db = new Database;
-  var result = db.getMock('POST', '/testurl/getData');
-  res.setHeader('content-type', 'application/json; charset=utf-8');
+  var result = db.getMocks();
+  // res.setHeader('content-type', 'application/json; charset=utf-8');
   res.send(result)
 })
 
