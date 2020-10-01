@@ -42,13 +42,9 @@ export default function EndpointTable(props) {
 
     const handleChange = (event, index) => {
         let items = [...state.rows];
-        // 2. Make a shallow copy of the item you want to mutate
         let item = { ...items[index] };
-        // 3. Replace the property you're intested in
         item.method = event.target.value;
-        // 4. Put it back into our array. N.B. we *are* mutating the array here, but that's why we made a copy first
         items[index] = item;
-        // 5. Set the state to our new copy
         setState({ rows: items });
     };
 
