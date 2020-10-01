@@ -12,9 +12,11 @@ app.use(cors())
 app.use(bodyParser.json())
 
 
-app.get('/a', (req, res) => {
-  db.upsertMock('POST', '/testurl/getData', {'test' : 1});
-  res.send('Hello World!')
+app.get('/mocks', (req, res) => {
+  var db = new Database;
+  var result = db.getMock('POST', '/testurl/getData');
+  res.setHeader('content-type', 'application/json; charset=utf-8');
+  res.send(result)
 })
 
 app.post('/upsertmock', (req, res) => {
@@ -26,7 +28,7 @@ app.post('/upsertmock', (req, res) => {
 app.delete('/removemock', (req, res) => {
   var fixedURL = util.fixURLParameter(req.body.url);
   db.removeMock(req.body.method, fixedURL);
-  res.sendStatus(200) 
+  res.sendStatus(200)
 });
 
 app.listen(port, () => {

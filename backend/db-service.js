@@ -5,23 +5,32 @@ module.exports = class Database {
     upsertMock(method, url, body) {
         var directories = url.split('/');
         var fileName = directories.pop();
-        var path ='db/' + directories.join('/');
+        var path = 'db/' + directories.join('/');
         var pathAndFileName = path + '/' + fileName + '.' + method + '.json'
         fs.mkdirSync(path, { recursive: true });
         fs.writeFileSync(pathAndFileName, JSON.stringify(body));
     };
 
-    getMocks() {
-
+    getMock(method, url) {
+        var path = this.buildPathAndFileName(url, method)
+        return fs.readFileSync(path, 'utf8')
     }
 
     removeMock(method, url) {
-        var filePath = 'db' + url + '.' + method+ '.json'; 
+        var filePath = 'db' + url + '.' + method + '.json';
         try {
             fs.unlinkSync(filePath);
-        } catch(err) {
+        } catch (err) {
             console.log(err);
         }
     }
+
+    buildPathAndFileName(url, method) {
+        var directories = url.split('/');
+        var fileName = directories.pop();
+        var path = 'db/' + directories.join('/');
+        return path + '/' + fileName + '.' + method + '.json'
+    }
+
 }
 
