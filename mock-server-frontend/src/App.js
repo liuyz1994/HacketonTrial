@@ -60,17 +60,6 @@ function App() {
   };
 
 
-  function createData(method, endpoint, body, isSaved) {
-    return { method, endpoint, body, isSaved};
-  }
-
-  const rows = [
-    createData("GET", "/api/v1/test", "{json: \"body\"}", false),
-    createData("POST", "/api/v1/test", "{json: \"body\"}", false),
-    createData("PUT", "/api/v1/test", "{json: \"body\"}", false),
-    createData("DELETE", "/api/v1/test", "{json: \"body\"}", false)
-  ];
-
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -80,7 +69,7 @@ function App() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <EndpointTable rows={rows} />
+        <EndpointTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Log table

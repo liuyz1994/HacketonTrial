@@ -1,20 +1,20 @@
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-//import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
+import React from 'react';
 
+//import TableHead from '@material-ui/core/TableHead';
 
 const useStyles = makeStyles({
     table: {
@@ -24,45 +24,50 @@ const useStyles = makeStyles({
 
 
 
-export default function EndpointTable(props) {
+export default function EndpointTable() {
     const classes = useStyles();
 
+    const baseUrl = "http://localhost:3000"
 
-    const [state, setState] = React.useState({ rows: props.rows });
+    const [state, setState] = React.useState({ rows: [] });
+
+    React.useEffect(() => {
+        console.log("mounted!")
+        getAll();
+    }, []);
+
+    const getAll = () => {
+        axios.get(baseUrl + '/mocks')
+            .then(res => {
+                console.log(res.data);
+                setState({ rows: res.data })
+            })
+    }
 
     const postElement = element => {
         axios.post(
-            'htpps:{server_url}/mocks',
+            baseUrl + '/mocks',
             element,
+            // { method: element.method, url: element.url, value: element.value },
             { headers: { 'Content-Type': 'application/json' } }
         ).then(res => {
             console.log(res.data);
         });
-
-
     };
 
     const removeRow = element => {
         axios.delete(
-            'htpps:{server_url}/mocks',
+            baseUrl + '/mocks',
             element,
+            // { method: element.method, url: element.url, value: element.value },
             { headers: { 'Content-Type': 'application/json' } }
         ).then(res => {
             console.log(res.data);
         });
     };
 
-    // const getSomething = element =>{
-    //     axios.get(
-    //        'https://jsonplaceholder.typicode.com/users',
-    //        { headers: { 'Content-Type': 'application/json' } }
-    //     ).then(res => {
-    //         console.log(res.data);
-    //     });
-    // }
-
     const addRow = () => {
-        setState({ rows: [...state.rows, { method: "GET", endpoint: "/api/v1/test", body: "{json: \"body\"}" , isSaved :false}] });
+        setState({ rows: [...state.rows, { method: "GET", url: "/api/v1/test", value: "{json: \"body\"}", isSaved: false }] });
     }
 
     const handleChange = (event, index) => {
@@ -98,10 +103,10 @@ export default function EndpointTable(props) {
                                     {/*<TextField id="method" label="Outlined" variant="outlined" value={row.method} />*/}
                                 </TableCell>
                                 <TableCell align="right">
-                                    <TextField id="endpoint" label="EndPoint" variant="outlined" value={row.endpoint} />
+                                    <TextField id="endpoint" label="EndPoint" variant="outlined" defaultValue={row.url} />
                                 </TableCell>
                                 <TableCell align="right">
-                                    <TextField id="body" label="Response Body" variant="outlined" value={row.body} multiline rows={4} />
+                                    <TextField id="body" label="Response Body" variant="outlined" defaultValue={row.value} multiline rows={4} />
                                 </TableCell>
                                 <TableCell align="right">
                                     {(row.isSaved) ? (
