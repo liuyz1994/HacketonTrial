@@ -15,9 +15,13 @@ module.exports = class Database {
 
     }
 
-    removeMock() {
-
+    removeMock(method, url) {
+        var filePath = 'db' + url + '.' + method+ '.json'; 
+        try {
+            fs.unlinkSync(filePath);
+        } catch(err) {
+            console.log(err);
+        }
     }
-
 }
 
