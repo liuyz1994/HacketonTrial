@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 
 app.get('/mocks', (req, res) => {
   var result = db.getMocks();
-  // res.setHeader('content-type', 'application/json; charset=utf-8');
+  res.setHeader('content-type', 'application/json; charset=utf-8');
   res.send(result)
 })
 
@@ -30,26 +30,34 @@ app.delete('/mocks', (req, res) => {
   res.sendStatus(200)
 });
 
+var responseWithMock = function (req, res) {
+  var requestedURL = util.removeMockPartFromPath(req.url);
+  try {
+    var body = db.getMockByMethodAndURL(requestedURL, req.method);
+    res.setHeader("Content-Type", "application/json");
+    res.send(body);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      console.log('File not found!');
+      res.sendStatus(404)
+    } else {
+      throw err;
+    }
+  }
+}
+
 app.route('/mock/*')
   .get(function (req, res) {
-    var requestedURL = util.removeMockPartFromPath(req.url);
-    var body = db.getMockByMethodAndURL(requestedURL, 'GET');
-    res.send(body);
+    responseWithMock(req, res);
   })
   .post(function (req, res) {
-    var requestedURL = util.removeMockPartFromPath(req.url);
-    var body = db.getMockByMethodAndURL(requestedURL, 'POST');
-    res.send(body);
+    responseWithMock(req, res);
   })
   .put(function (req, res) {
-    var requestedURL = util.removeMockPartFromPath(req.url);
-    var body = db.getMockByMethodAndURL(requestedURL, 'PUT');
-    res.send(body);
+    responseWithMock(req, res);
   })
   .delete(function (req, res) {
-    var requestedURL = util.removeMockPartFromPath(req.url);
-    var body = db.getMockByMethodAndURL(requestedURL, 'DELETE');
-    res.send(body);
+    responseWithMock(req, res);
   });
 
 
