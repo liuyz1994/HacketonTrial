@@ -39,9 +39,11 @@ export default function EndpointTable() {
     const getAll = () => {
         axios.get(baseUrl + '/mocks')
             .then(res => {
-                let data = res.data;
-                console.log(data);
-                data.foreach(x => { x["isSaved"] = true });
+                let data = res.data.map(x => {
+                    x["isSaved"] = true;
+                    x["value"] = JSON.stringify(x["value"]);
+                    return x;
+                });
                 setState({ rows: data })
             })
     }
@@ -69,7 +71,7 @@ export default function EndpointTable() {
     };
 
     const addRow = () => {
-        setState({ rows: [...state.rows, { method: "GET", url: "/api/v1/test", value: "{json: \"body\"}", isSaved: false }] });
+        setState({ rows: [...state.rows, { method: "GET", url: "/api/v1/test", value: "{\"json\": \"body\"}", isSaved: false }] });
     }
 
     const handleChange = (event, index) => {
