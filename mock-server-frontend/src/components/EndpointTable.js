@@ -12,6 +12,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import React from 'react';
 
@@ -23,7 +25,9 @@ const useStyles = makeStyles({
     },
 });
 
-
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function EndpointTable() {
     const classes = useStyles();
@@ -32,6 +36,8 @@ export default function EndpointTable() {
     const baseUrl = "https://mock-back.herokuapp.com"
 
     const [state, setState] = React.useState({ rows: [] });
+    const [open, setOpen] = React.useState(false);
+    let [message, setMessage] = React.useState({});
 
     React.useEffect(() => {
         console.log("mounted!")
@@ -65,6 +71,16 @@ export default function EndpointTable() {
                 item.isSaved = true;
                 items[index] = item;
                 setState({ rows: items });
+                message.sucess = true;
+                message.info = "Your endpoint has been saved successfully!";
+                setOpen(true);
+                setMessage(message);
+
+            } else {
+                message.sucess = false;
+                message.info = res.message;
+                setOpen(true);
+                setMessage(message);
             }
         });
     };
@@ -112,11 +128,30 @@ export default function EndpointTable() {
         setState({ rows: items });
     }
 
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
     const style = {
-        minWidth:'25vw'};
+        minWidth: '25vw'
+    };
 
     return (
         <Container>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                {(message.sucess) ?
+                    (<Alert onClose={handleClose} severity="success">
+                        {message.info}
+                    </Alert>) : (
+                        <Alert onClose={handleClose} severity="error">
+                            {message.info}
+                        </Alert>
+                    )
+                }
+            </Snackbar>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableBody>
@@ -144,7 +179,7 @@ export default function EndpointTable() {
                                     <TextField id="endpoint" label="EndPoint" disabled={row.isSaved} onChange={event => handleChangeURL(event, index)} variant="outlined" value={row.url} />
                                 </TableCell>
                                 <TableCell align="right">
-                                    <textarea id="body" label="Response Body" style={style} onChange={event => handleChangeValue(event, index)} variant="outlined" value={row.value} multiline rows={10} />
+                                    <TextareaAutosize id="body" label="Response Body" style={style} onChange={event => handleChangeValue(event, index)} variant="outlined" value={row.value} multiline rowsMax={10} />
                                 </TableCell>
                                 <TableCell align="right">
                                     <Button variant="contained" color="primary" onClick={() => postElement(row, index)}>Save</Button>
