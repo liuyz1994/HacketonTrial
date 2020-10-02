@@ -40,7 +40,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
   };
 }
 
@@ -53,11 +53,17 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
+
   const [value, setValue] = React.useState(0);
+  const [logs, setLogs] = React.useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const changeLogs = (logs) => {
+    setLogs(logs)
+  }
 
 
   return (
@@ -72,7 +78,7 @@ function App() {
         <EndpointTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <RequestTable />
+        <RequestTable logs={logs} changeLogs={changeLogs} />
       </TabPanel>
     </div>
   );

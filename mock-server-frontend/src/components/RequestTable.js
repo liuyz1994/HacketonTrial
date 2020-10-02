@@ -13,16 +13,13 @@ const columns = [
     { field: 'source', headerName: 'Source', width: 200 }
 ];
 
-export default function LogTable() {
+export default function LogTable(props) {
 
     // const baseUrl = "http://localhost:3000"
     const baseUrl = "https://mock-back.herokuapp.com"
 
-    const [state, setState] = React.useState({ logs: [] });
-
     React.useEffect(() => {
         console.log("mounted!")
-        // getLogs();
     }, []);
 
     const getLogs = () => {
@@ -38,7 +35,7 @@ export default function LogTable() {
                     element.resBody = JSON.stringify(element.resBody);
                     return element;
                 })
-                setState({ logs: data });
+                props.changeLogs(data)
             });
     }
 
@@ -47,7 +44,7 @@ export default function LogTable() {
             <Button size="large" variant="contained" onClick={() => getLogs()} color="primary">View Requests</Button>
             {/* <DataGridDemo logs={state.logs}/> */}
             <div style={{ height: '80vh', width: '100%' }}>
-                <DataGrid rows={state.logs} columns={columns} pageSize={30} />
+                <DataGrid rows={props.logs} columns={columns} pageSize={30} />
             </div>
         </Container>
     );
