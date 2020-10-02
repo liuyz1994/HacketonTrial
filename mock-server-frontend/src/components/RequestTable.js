@@ -1,16 +1,8 @@
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
 import axios from 'axios';
 import React from 'react';
-
-const useStyles = makeStyles({
-    table: {
-        minWidth: 650,
-    },
-});
-
 
 const columns = [
     { field: 'datetime', headerName: 'Timestamp', width: 200 },
@@ -22,7 +14,6 @@ const columns = [
 ];
 
 export default function LogTable() {
-    const classes = useStyles();
 
     // const baseUrl = "http://localhost:3000"
     const baseUrl = "https://mock-back.herokuapp.com"
