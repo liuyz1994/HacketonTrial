@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import EndpointTable from './components/EndpointTable';
+import LogTable from './components/LogTable';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -72,7 +73,7 @@ function App() {
         <EndpointTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Log table
+        <LogTable />
       </TabPanel>
     </div>
   );
