@@ -11,8 +11,9 @@ const useStyles = makeStyles({
     },
 });
 
+
 const columns = [
-    { field: 'timestamp', headerName: 'Timestamp' },
+    { field: 'datetime', headerName: 'Timestamp', width: 200 },
     { field: 'method', headerName: 'Method', width: 130 },
     { field: 'url', headerName: 'URL', width: 300 },
     { field: 'reqBody', headerName: 'Request Body', width: 200 },
@@ -31,14 +32,6 @@ const columns = [
     // },
 ];
 
-export function DataGridDemo(props) {
-    return (
-        <div style={{ height: 400, width: '100%' }}>
-            <DataGrid rows={props.logs} columns={columns} pageSize={5} />
-        </div>
-    );
-}
-
 export default function LogTable() {
     const classes = useStyles();
 
@@ -52,15 +45,15 @@ export default function LogTable() {
         // getLogs();
     }, []);
 
-
     const getLogs = () => {
         axios.get(baseUrl + "/logs")
             .then(res => {
-                // {timestamp method, url, reqBody, resBody, source}
-                console.log(res.data);
                 let data = res.data.map((element, index) => {
                     element.id = index;
-                    element.timestamp = index;
+                    if (element.datetime) {
+                        var date = new Date(element.datetime)
+                        element.datetime = date.toISOString();
+                    }
                     element.reqBody = JSON.stringify(element.reqBody);
                     element.resBody = JSON.stringify(element.resBody);
                     return element;
@@ -74,7 +67,7 @@ export default function LogTable() {
             <Button size="large" variant="contained" onClick={() => getLogs()} color="primary">Update Logs</Button>
             {/* <DataGridDemo logs={state.logs}/> */}
             <div style={{ height: '80vh', width: '100%' }}>
-                <DataGrid rows={state.logs} columns={columns} pageSize={30} checkboxSelection />
+                <DataGrid rows={state.logs} columns={columns} pageSize={30} />
             </div>
         </Container>
     );
