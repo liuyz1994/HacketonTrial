@@ -47,7 +47,7 @@ export default function EndpointTable() {
             .then(res => {
                 let data = res.data.map(x => {
                     x.isSaved = true
-                    x.value = JSON.stringify(x.value, null, 2)
+                    x.value = JSON.stringify(x.value, null, 2) // json-object, replacer-function (not needed), number of spaces for indentation
                     return x;
                 });
                 setState({ rows: data })
