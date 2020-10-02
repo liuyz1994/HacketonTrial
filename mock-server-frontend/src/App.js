@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import EndpointTable from './components/EndpointTable';
-import LogTable from './components/LogTable';
+import RequestTable from './components/RequestTable';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,14 +66,14 @@ function App() {
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
           <Tab label="Endpoints" {...a11yProps(0)} />
-          <Tab label="Logs" {...a11yProps(1)} />
+          <Tab label="Requests" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
         <EndpointTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <LogTable />
+        <RequestTable />
       </TabPanel>
     </div>
   );
