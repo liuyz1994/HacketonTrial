@@ -27,7 +27,8 @@ const useStyles = makeStyles({
 export default function EndpointTable() {
     const classes = useStyles();
 
-    const baseUrl = "http://localhost:3000"
+    // const baseUrl = "http://localhost:3000"
+    const baseUrl = "https://mock-back.herokuapp.com"
 
     const [state, setState] = React.useState({ rows: [] });
 
