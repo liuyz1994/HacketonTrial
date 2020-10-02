@@ -13,7 +13,8 @@ module.exports = class Database {
         var path = basePath + "/" + directories.join('/');
         var pathAndFileName = path + '/' + fileName + '.' + method + '.json'
         fs.mkdirSync(path, { recursive: true });
-        fs.writeFileSync(pathAndFileName, JSON.stringify(body));
+        console.log('body',body)
+        fs.writeFileSync(pathAndFileName, JSON.stringify(JSON.parse(body)));
     };
 
     getMocks() {

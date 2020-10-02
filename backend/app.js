@@ -24,7 +24,7 @@ app.post('/mocks', (req, res) => {
   res.sendStatus(200);
 })
 
-app.delete('/mocks', (req, res) => {
+app.post('/mocks/delete', (req, res) => {
   var fixedURL = util.fixURLParameter(req.body.url);
   db.removeMock(req.body.method, fixedURL);
   res.sendStatus(200)
