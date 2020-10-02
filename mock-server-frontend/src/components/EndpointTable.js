@@ -1,3 +1,4 @@
+import { TextareaAutosize } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -111,6 +112,9 @@ export default function EndpointTable() {
         setState({ rows: items });
     }
 
+    const style = {
+        minWidth:'25vw'};
+
     return (
         <Container>
             <TableContainer component={Paper}>
@@ -140,7 +144,7 @@ export default function EndpointTable() {
                                     <TextField id="endpoint" label="EndPoint" disabled={row.isSaved} onChange={event => handleChangeURL(event, index)} variant="outlined" value={row.url} />
                                 </TableCell>
                                 <TableCell align="right">
-                                    <TextField id="body" label="Response Body" onChange={event => handleChangeValue(event, index)} variant="outlined" value={row.value} multiline rows={4} />
+                                    <textarea id="body" label="Response Body" style={style} onChange={event => handleChangeValue(event, index)} variant="outlined" value={row.value} multiline rows={10} />
                                 </TableCell>
                                 <TableCell align="right">
                                     <Button variant="contained" color="primary" onClick={() => postElement(row, index)}>Save</Button>
