@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const utilModule = require('./util.js');
 
 const app = express()
-const port = 3000;
+const port = process.env.PORT || 3000;
 const db = new database;
 const util = new utilModule;
 app.use(cors())
@@ -39,7 +39,7 @@ var responseWithMock = function (req, res) {
   var requestedURL = util.removeMockPartFromPath(req.url);
   try {
     var body = db.getMockByMethodAndURL(requestedURL, req.method);
-    db.addLog(req.method, requestedURL, req.body, body, req.get('host'));
+    db.addLog(req.method, requestedURL, req.body, body, req.get('host'), Date.now());
     res.setHeader("Content-Type", "application/json");
     res.send(body);
   } catch (err) {
