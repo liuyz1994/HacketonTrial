@@ -40,15 +40,16 @@ export default function EndpointTable() {
         axios.get(baseUrl + '/mocks')
             .then(res => {
                 let data = res.data.map(x => {
-                    x["isSaved"] = true;
-                    x["value"] = JSON.stringify(x["value"]);
+                    x.isSaved = true
+                    x.value = JSON.stringify(x.value)
                     return x;
                 });
                 setState({ rows: data })
             })
     }
 
-    const postElement = element => {
+    const postElement = (element, index) => {
+        console.log(element)
         axios.post(
             baseUrl + '/mocks',
             // element,
@@ -56,22 +57,33 @@ export default function EndpointTable() {
             { headers: { 'Content-Type': 'application/json' } }
         ).then(res => {
             console.log(res.data);
+            if (res.status === 200) {
+                let items = [...state.rows];
+                let item = { ...items[index] };
+                item.isSaved = true;
+                items[index] = item;
+                setState({ rows: items });
+            }
         });
     };
 
-    const removeRow = element => {
-        axios.delete(
-            baseUrl + '/mocks',
+    const removeRow = (element, index) => {
+        axios.post(
+            baseUrl + '/mocks/delete',
             // element,
             { method: element.method, url: element.url, value: element.value },
             { headers: { 'Content-Type': 'application/json' } }
         ).then(res => {
-            console.log(res.data);
+            if (res.status === 200) {
+                const filteredItems = state.rows.filter((e, i) => i != index)
+                console.log(filteredItems);
+                setState({ rows: filteredItems });
+            }
         });
     };
 
     const addRow = () => {
-        setState({ rows: [...state.rows, { method: "GET", url: "/api/v1/test", value: "{\"json\": \"body\"}", isSaved: false }] });
+        setState({ rows: [...state.rows, { method: "GET", url: "/api/v1/test", value: `{"json": "body"}`, isSaved: false }] });
     }
 
     const handleChange = (event, index) => {
@@ -80,7 +92,23 @@ export default function EndpointTable() {
         item.method = event.target.value;
         items[index] = item;
         setState({ rows: items });
-    };
+    }
+
+    const handleChangeValue = (event, index) => {
+        let items = [...state.rows];
+        let item = { ...items[index] };
+        item.value = event.target.value;
+        items[index] = item;
+        setState({ rows: items });
+    }
+
+    const handleChangeURL = (event, index) => {
+        let items = [...state.rows];
+        let item = { ...items[index] };
+        item.url = event.target.value;
+        items[index] = item;
+        setState({ rows: items });
+    }
 
     return (
         <Container>
@@ -98,6 +126,7 @@ export default function EndpointTable() {
                                         value={row.method}
                                         onChange={event => handleChange(event, index)}
                                         label="Method"
+                                        disabled={row.isSaved}
                                     >
                                         <MenuItem value={"GET"}>GET</MenuItem>
                                         <MenuItem value={"POST"}>POST</MenuItem>
@@ -107,15 +136,15 @@ export default function EndpointTable() {
                                     {/*<TextField id="method" label="Outlined" variant="outlined" value={row.method} />*/}
                                 </TableCell>
                                 <TableCell align="right">
-                                    <TextField id="endpoint" label="EndPoint" variant="outlined" defaultValue={row.url} />
+                                    <TextField id="endpoint" label="EndPoint" disabled={row.isSaved} onChange={event => handleChangeURL(event, index)} variant="outlined" value={row.url} />
                                 </TableCell>
                                 <TableCell align="right">
-                                    <TextField id="body" label="Response Body" variant="outlined" defaultValue={row.value} multiline rows={4} />
+                                    <TextField id="body" label="Response Body" onChange={event => handleChangeValue(event, index)} variant="outlined" value={row.value} multiline rows={4} />
                                 </TableCell>
                                 <TableCell align="right">
+                                    <Button variant="contained" color="primary" onClick={() => postElement(row, index)}>Save</Button>
                                     {(row.isSaved) ? (
-                                        <Button variant="contained" color="secondary" onClick={() => removeRow(row)}>Remove</Button>) :
-                                        (<Button variant="contained" color="primary" onClick={() => postElement(row)}>Add</Button>)
+                                        <Button variant="contained" color="secondary" onClick={() => removeRow(row, index)}>Remove</Button>) : null
                                     }
                                 </TableCell>
                                 {/*</form>*/}
